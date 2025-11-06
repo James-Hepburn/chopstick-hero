@@ -6,25 +6,40 @@ export default class MainMenuScene extends Phaser.Scene {
   }
 
   preload() {
-    
+    this.load.image('startButtonNormal', 'normal-start-button.png');
+    this.load.image('startButtonHover', 'hover-start-button.png');
+    this.load.image('startButtonPressed', 'pressed-start-button.png');
   }
 
   create() {
     const { width, height } = this.scale;
 
-    this.add.text(width / 2, height / 2 - 100, '🥢 Chopstick Hero 🥢', {
+    this.add.text(width / 2, height / 2 - 150, '🥢 Chopstick Hero 🥢', {
       fontSize: '64px',
       fontFamily: 'sans-serif',
-      color: '#fff'
+      color: '#ffffff'
     }).setOrigin(0.5);
 
-    const startText = this.add.text(width / 2, height / 2 + 50, 'Click to Start', {
-      fontSize: '32px',
-      color: '#ffcc00'
-    }).setOrigin(0.5).setInteractive();
+    const startButton = this.add.image(width / 2, height / 2 + 50, 'startButtonNormal')
+      .setOrigin(0.5)
+      .setScale(2)
+      .setInteractive({ useHandCursor: true });
 
-    startText.on('pointerover', () => startText.setStyle({ color: '#ffff66' }));
-    startText.on('pointerout', () => startText.setStyle({ color: '#ffcc00' }));
-    startText.on('pointerdown', () => this.scene.start('GameScene'));
+    startButton.on('pointerover', () => {
+      startButton.setTexture('startButtonHover');
+    });
+
+    startButton.on('pointerout', () => {
+      startButton.setTexture('startButtonNormal');
+    });
+
+    startButton.on('pointerdown', () => {
+      startButton.setTexture('startButtonPressed');
+    });
+
+    startButton.on('pointerup', () => {
+      startButton.setTexture('startButtonHover');
+      this.scene.start('GameScene');
+    });
   }
 }
